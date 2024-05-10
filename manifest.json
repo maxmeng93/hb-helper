@@ -11,7 +11,7 @@
       "128": "images/icon128.png"
     }
   },
-  "permissions": ["activeTab", "storage", "http://*/*", "https://*/*"],
+  "permissions": ["activeTab", "tabs", "storage", "http://*/*", "https://*/*"],
   "background": {
     "service_worker": "background.js",
     "type": "module"

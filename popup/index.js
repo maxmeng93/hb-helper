@@ -3,3 +3,8 @@
 
 // 刷新弹出窗口
 // location.reload();
+
+document.getElementById("hb").addEventListener("click", function () {
+  const url = "https://m.touker.com/fd/conditions/monitoring";
+  chrome.tabs.create({ url });
+});
