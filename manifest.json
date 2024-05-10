@@ -11,10 +11,25 @@
       "128": "images/icon128.png"
     }
   },
-  "permissions": ["activeTab", "tabs", "storage", "http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.touker.com/*"
+      ],
+      "js": [
+        "src/content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
-  },
-  "omnibox": { "keyword": "api" }
+  }
 }

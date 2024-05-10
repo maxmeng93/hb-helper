@@ -4,7 +4,15 @@
 // 刷新弹出窗口
 // location.reload();
 
+const url = "https://m.touker.com/fd/conditions/monitoring";
+
 document.getElementById("hb").addEventListener("click", function () {
-  const url = "https://m.touker.com/fd/conditions/monitoring";
   chrome.tabs.create({ url });
+});
+
+document.getElementById('postpone').addEventListener('click', function () {
+
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { action: 'postpone' });
+  });
 });
