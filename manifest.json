@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "华宝条件单自动延期",
+  "version": "0.0.1",
+  "description": "华宝智投条件单自动延期",
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "permissions": ["activeTab", "storage", "http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "omnibox": { "keyword": "api" }
+}
