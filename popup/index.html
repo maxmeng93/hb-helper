@@ -1,46 +1,92 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>华宝条件单助手</title>
+    <style>
+      body {
+        width: 10rem;
+        padding: 0;
+        margin: 0;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>华宝条件单自动延期</title>
-  <style>
-    body {
-      width: 20rem;
-    }
+      #main {
+        background-color: #e8eaeb;
+      }
 
-    ul {
-      list-style-type: none;
-      padding-inline-start: 0;
-      margin: 1rem 0;
-    }
+      header {
+        padding-top: 16px;
+        background-color: #fff;
+      }
 
-    li {
-      padding: 0.25rem;
-    }
+      h2 {
+        margin: 0;
+        font-size: 18px;
+        text-align: center;
+        color: #dd3432;
+        font-style: italic;
+      }
 
-    li:nth-child(odd) {
-      background: #80808030;
-    }
+      #container {
+        padding: 16px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        background-color: #fff;
+      }
 
-    li:nth-child(even) {
-      background: #ffffff;
-    }
+      .btn {
+        display: block;
+        padding: 8px 16px;
+        margin-bottom: 8px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
 
-    h3,
-    p {
-      margin: 0;
-    }
-  </style>
-</head>
+      .btn:disabled {
+        background-color: #c2c2c2;
+        cursor: not-allowed;
+      }
 
-<body>
-  <button id="hb">查看条件单</button>
-  <button id="postpone">自动延期</button>
+      #container .btn:last-child {
+        margin-bottom: 0px;
+      }
 
-  <script src="./index.js" type="module"></script>
-</body>
+      footer {
+        padding: 4px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
+      #version {
+        color: #c2c2c2;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="main">
+      <header>
+        <h2>华宝条件单助手</h2>
+      </header>
+      <div id="container">
+        <button class="btn" id="hb">查看条件单</button>
+        <button class="btn" id="postpone">自动延期</button>
+      </div>
+      <footer>
+        <span id="version"></span>
+      </footer>
+    </div>
+
+    <script src="./index.js" type="module"></script>
+  </body>
 </html>
