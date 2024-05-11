@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "华宝条件单助手",
   "version": "0.1.0",
-  "description": "快速打开华宝条件单，一键延期所有条件单",
+  "description": "快速打开华宝智投条件单网页，一键延期所有条件单",
   "action": {
     "default_popup": "popup/index.html",
     "default_icon": {
