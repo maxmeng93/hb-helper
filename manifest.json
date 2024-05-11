@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "华宝条件单自动延期",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "华宝智投条件单自动延期",
   "action": {
     "default_popup": "popup/index.html",
     "default_icon": {
       "16": "images/16x16.png",
-      "48": "images/48x48.png",
-      "128": "images/128x128.png"
+      "32": "images/32x32.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
     }
   },
   "content_scripts": [
@@ -17,7 +18,8 @@
       "js": ["src/content.js"]
     }
   ],
-  "permissions": ["activeTab", "tabs", "storage", "http://*/*", "https://*/*"],
+  "permissions": ["activeTab", "storage"],
+  "optional_permissions": [],
   "background": {
     "service_worker": "background.js",
     "type": "module"
