@@ -1,3 +1,3 @@
-# hb-conditions-postpone-extension
+# hb-helper
 
-华宝智投条件单自动延期浏览器插件
+华宝条件单助手，用于快速打开华宝条件单，一键延期所有条件单。
