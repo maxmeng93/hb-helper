@@ -19,25 +19,43 @@ function setVersion() {
 }
 
 function addEvent() {
+  // 打开华宝
   document.getElementById("hb").addEventListener("click", function () {
     chrome.tabs.create({ url });
   });
 
-  document.getElementById("postpone").addEventListener("click", function () {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, { action: "postpone" });
+  // 单个延期
+  document
+    .getElementById("postpone-single")
+    .addEventListener("click", function () {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-single" });
+      });
     });
-  });
+
+  // 批量延期
+  document
+    .getElementById("postpone-multiple")
+    .addEventListener("click", function () {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-multiple" });
+      });
+    });
 }
 
 function checkIsHb() {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    const postpone = document.getElementById("postpone");
-    var tab = tabs[0];
+    if (tabs.length === 0) return;
+    const tab = tabs[0];
+    const list = document.getElementsByClassName("postpone");
     if (tab.url.startsWith(url)) {
-      postpone.disabled = false;
+      for (let item of list) {
+        item.disabled = false;
+      }
     } else {
-      postpone.disabled = true;
+      for (let item of list) {
+        item.disabled = true;
+      }
     }
   });
 }
