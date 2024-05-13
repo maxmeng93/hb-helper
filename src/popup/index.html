@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>华宝条件单助手</title>
     <style>
+      :root {
+        --color: #dd3432;
+        --color-primary: #1677ff;
+        --color-error: #ff4d4f;
+        --color-disabled: #c2c2c2;
+        --color-text-disabled: rgba(0, 0, 0, 0.25);
+        --color-bg-disabled: rgba(0, 0, 0, 0.04);
+        --color-border-disabled: #d9d9d9;
+      }
+
       body {
         width: 10rem;
         padding: 0;
@@ -25,7 +35,7 @@
         margin: 0;
         font-size: 18px;
         text-align: center;
-        color: #dd3432;
+        color: var(--color);
         font-style: italic;
       }
 
@@ -41,19 +51,28 @@
       }
 
       .btn {
-        display: block;
+        box-sizing: border-box;
+        width: 100%;
         padding: 8px 16px;
         margin-bottom: 8px;
         font-size: 12px;
-        border: none;
         border-radius: 4px;
-        background-color: #007bff;
+        border: 1px solid transparent;
+        background-color: var(--color-primary);
         color: #fff;
         cursor: pointer;
       }
 
+      .btn.dangerous {
+        color: var(--color-error);
+        border-color: var(--color-error);
+        background-color: #fff;
+      }
+
       .btn:disabled {
-        background-color: #c2c2c2;
+        color: var(--color-text-disabled);
+        border-color: var(--color-border-disabled);
+        background-color: var(--color-bg-disabled);
         cursor: not-allowed;
       }
 
@@ -62,14 +81,19 @@
       }
 
       footer {
-        padding: 4px 20px;
+        padding: 4px 10px;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
       }
 
       #version {
         color: #c2c2c2;
+      }
+
+      #go-to-options {
+        cursor: pointer;
+        color: #666666;
       }
     </style>
   </head>
@@ -87,9 +111,11 @@
         <button class="btn postpone" id="postpone-multiple">
           自动延期(多个)
         </button>
+        <button class="btn dangerous" id="postpone-stop">停止延期</button>
       </div>
       <footer>
         <span id="version"></span>
+        <span id="go-to-options">更多</span>
       </footer>
     </div>
 

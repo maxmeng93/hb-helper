@@ -9,14 +9,26 @@ const SUBMIT_ORDER = "SUBMIT_ORDER";
 
 const single = "postpone-single";
 const multiple = "postpone-multiple";
+const stop = "postpone-stop";
 
+const stopCache = "stop";
 const stateCache = "state";
 const postponeTypeCache = "postpone-type";
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === single || request.action === multiple) {
-    setLocalStorage(postponeTypeCache, request.action);
-    checkDeadline();
+  const action = request.action;
+
+  switch (action) {
+    case single:
+    case multiple:
+      setLocalStorage(postponeTypeCache, action);
+      checkDeadline();
+      break;
+    case stop:
+      setLocalStorage(stopCache, "true");
+      break;
+    default:
+      break;
   }
 });
 
@@ -48,6 +60,13 @@ function getLocalStorage(key) {
 
 async function checkState() {
   try {
+    const isStop = await getLocalStorage(stopCache);
+    if (isStop) {
+      setLocalStorage(stopCache, "");
+      setLocalStorage(stateCache, "");
+      return;
+    }
+
     const state = await getLocalStorage(stateCache);
 
     // 检查截止日期

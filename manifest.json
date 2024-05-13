@@ -4,12 +4,12 @@
   "version": "0.1.0",
   "description": "快速打开华宝智投条件单网页，一键延期所有条件单",
   "action": {
-    "default_popup": "popup/index.html",
+    "default_popup": "src/popup/index.html",
     "default_icon": {
-      "16": "images/16x16.png",
-      "32": "images/32x32.png",
-      "48": "images/icon48.png",
-      "128": "images/icon128.png"
+      "16": "images/logo/16x16.png",
+      "32": "images/logo/32x32.png",
+      "48": "images/logo/icon48.png",
+      "128": "images/logo/icon128.png"
     }
   },
   "content_scripts": [
@@ -18,6 +18,7 @@
       "js": ["src/content.js"]
     }
   ],
+  "options_page": "src/options/index.html",
   "permissions": ["activeTab", "storage"],
   "optional_permissions": [],
   "background": {
