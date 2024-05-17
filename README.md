@@ -4,7 +4,7 @@
 
 ## 下载
 
-1. [Chrome 浏览器]()（审核中）
+1. [Chrome 浏览器](https://chromewebstore.google.com/detail/%E5%8D%8E%E5%AE%9D%E6%9D%A1%E4%BB%B6%E5%8D%95%E5%8A%A9%E6%89%8B/peeidnfboehmmandoghpbhgmadegikaf)
 2. [Edge 浏览器]()（审核中）
 3. [其他浏览器](https://www.maxmeng.top/files/hb-helper.crx.zip)（参考离线包安装教程）
 
