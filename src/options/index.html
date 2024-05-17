@@ -15,10 +15,21 @@
       img {
         width: 200px;
       }
+      #version, #old-version {
+        font-size: 18px;
+      }
     </style>
   </head>
   <body>
     <div id="main">
+      <div>
+        <h2>最新版本：</h2>
+        <div id="version"></div>
+      </div>
+      <div>
+        <h2>当前版本：</h2>
+        <div id="old-version"></div>
+      </div>
       <div>
         <h2>使用教程：</h2>
         <ul>
@@ -40,4 +51,5 @@
       </div>
     </div>
   </body>
+  <script src="./index.js" type="module"></script>
 </html>
