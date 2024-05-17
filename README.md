@@ -6,11 +6,11 @@
 
 1. [Chrome 浏览器]()（审核中）
 2. [Edge 浏览器]()（审核中）
-3. [其他浏览器](https://github.com/maxmeng93/hb-helper/archive/refs/heads/main.zip)（参考离线包安装教程）
+3. [其他浏览器](https://www.maxmeng.top/files/hb-helper.crx.zip)（参考离线包安装教程）
 
 ## 离线包安装教程
 
-1. 下载安装文件，点击[下载](https://github.com/maxmeng93/hb-helper/archive/refs/heads/main.zip)离线包。
+1. 下载安装文件，点击[下载](https://www.maxmeng.top/files/hb-helper.crx.zip)离线包。
 2. 打开浏览器插件管理页面，地址为 `chrome://extensions/`。
 3. 开启“开发者模式”。
 4. 重启浏览器。
