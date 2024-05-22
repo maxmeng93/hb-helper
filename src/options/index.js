@@ -1,5 +1,5 @@
 function getConfig() {
-  const url = 'https://www.maxmeng.top/data/hb-helper.json'
+  const url = "https://www.maxmeng.top/data/hb-helper.json?t=" + Date.now();
 
   fetch(url)
     .then((res) => res.json())
@@ -20,5 +20,5 @@ function setVersion() {
   document.getElementById("old-version").textContent = `V${version}`;
 }
 
-getConfig()
-setVersion()
+getConfig();
+setVersion();

@@ -136,5 +136,8 @@ function checkDeadline() {
       return;
     }
   }
+  alert(
+    "没有符合延期条件的的订单。\n本插件暂时只延期截止日期在20天内的条件单。"
+  );
   setLocalStorage(stateCache, "");
 }
