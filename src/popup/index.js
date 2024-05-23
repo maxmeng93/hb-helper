@@ -11,55 +11,60 @@ window.onload = () => {
   checkIsHb();
 };
 
+function getElement(selector) {
+  return document.querySelector(selector);
+}
+
 function setVersion() {
   var manifestData = chrome.runtime.getManifest();
   var version = manifestData.version;
-  document.getElementById("version").textContent = `V${version}`;
+  getElement("#version").textContent = `V${version}`;
 }
 
 function addEvent() {
-  document
-    .querySelector("#go-to-options")
-    .addEventListener("click", function () {
-      if (chrome.runtime.openOptionsPage) {
-        chrome.runtime.openOptionsPage();
-      } else {
-        window.open(chrome.runtime.getURL("options.html"));
-      }
-    });
+  getElement("#go-to-options").addEventListener("click", function () {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL("options.html"));
+    }
+  });
 
   // 打开华宝
-  document.getElementById("hb").addEventListener("click", function () {
+  getElement("#hb").addEventListener("click", function () {
     chrome.tabs.create({ url });
   });
 
   // 单个延期
-  document
-    .getElementById("postpone-single")
-    .addEventListener("click", function () {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-single" });
-      });
+  getElement("#postpone-single").addEventListener("click", function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-single" });
     });
+  });
 
   // 批量延期
-  document
-    .getElementById("postpone-multiple")
-    .addEventListener("click", function () {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-multiple" });
-      });
+  getElement("#postpone-multiple").addEventListener("click", function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-multiple" });
     });
+  });
 
   // 停止延期
-  document
-    .getElementById("postpone-stop")
-    .addEventListener("click", function () {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        console.log("stop123");
-        chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-stop" });
-      });
+  getElement("#postpone-stop").addEventListener("click", function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { action: "postpone-stop" });
     });
+  });
+
+  // 显示华宝网格二维码
+  getElement("#show-hb-grid").addEventListener("click", function () {
+    getElement("#hb-grid-wrap").style.display = "block";
+  });
+
+  // 隐藏华宝网格二维码
+  getElement("#hb-grid-wrap").addEventListener("click", function () {
+    getElement("#hb-grid-wrap").style.display = "none";
+  });
 }
 
 function checkIsHb() {
@@ -88,3 +93,22 @@ function checkIsHb() {
     }
   });
 }
+
+function getConfig() {
+  const url = "https://www.maxmeng.top/data/hb-helper.json?t=" + Date.now();
+
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("data", data);
+      const time = data?.grid_update_time;
+      if (time) {
+        getElement("#grid-update-time").textContent = time;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+getConfig();

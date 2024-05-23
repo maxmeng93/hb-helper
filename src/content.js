@@ -21,8 +21,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (action) {
     case single:
     case multiple:
+      const orders = getOrders();
+      if (orders.length === 0) {
+        alert(
+          "没有符合延期条件的的订单。\n本插件暂时只延期截止日期在20天内的条件单。"
+        );
+        return;
+      }
       setLocalStorage(postponeTypeCache, action);
-      checkDeadline();
+      checkDeadline(orders);
       break;
     case stop:
       setLocalStorage(stopCache, "true");
@@ -74,7 +81,8 @@ async function checkState() {
       const postponeType = await getLocalStorage(postponeTypeCache);
       if (postponeType === single) return;
       await delay(1000);
-      checkDeadline();
+      const orders = getOrders();
+      checkDeadline(orders);
     }
 
     // 修改截止日期
@@ -104,37 +112,43 @@ async function checkState() {
   }
 }
 
-function checkDeadline() {
+function checkDeadline(orders) {
+  for (let order of orders) {
+    let ele = document.querySelectorAll(".monitor-item")[order.index];
+
+    const options = ele.querySelector(".opr").querySelectorAll("i");
+    for (let option of options) {
+      if (option.textContent === "延期") {
+        option.click();
+
+        setLocalStorage(stateCache, CHANGE_DEADLINE);
+        break;
+      }
+    }
+    return;
+  }
+
+  setLocalStorage(stateCache, "");
+}
+
+function getOrders() {
+  const list = [];
   let elements = document.querySelectorAll(".monitor-item");
-  const dates = [];
-  for (let element of elements) {
+
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
     let expireDate = element.querySelector(".expire-date");
     const date = expireDate.textContent.replace("截止日期：", "");
-    dates.push(date);
+    if (isMatch(date)) list.push({ date, index: i });
   }
 
+  return list;
+}
+
+function isMatch(date) {
   const now = new Date();
-
-  for (let date of dates) {
-    const index = dates.indexOf(date);
-    const expireDate = new Date(date);
-    const diff = expireDate.getTime() - now.getTime();
-    const days = Math.floor(diff / (24 * 3600 * 1000));
-
-    if (days <= 21) {
-      let ele = document.querySelectorAll(".monitor-item")[index];
-
-      const options = ele.querySelector(".opr").querySelectorAll("i");
-      for (let option of options) {
-        if (option.textContent === "延期") {
-          option.click();
-
-          setLocalStorage(stateCache, CHANGE_DEADLINE);
-          break;
-        }
-      }
-      return;
-    }
-  }
-  setLocalStorage(stateCache, "");
+  const expireDate = new Date(date);
+  const diff = expireDate.getTime() - now.getTime();
+  const days = Math.floor(diff / (24 * 3600 * 1000));
+  return days <= 21;
 }

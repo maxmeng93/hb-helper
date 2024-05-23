@@ -5,21 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>配置</title>
     <style>
+      :root {
+        --color: #dd3432;
+        --color-primary: #1677ff;
+        --color-error: #ff4d4f;
+        --color-disabled: #c2c2c2;
+        --color-text-disabled: rgba(0, 0, 0, 0.25);
+        --color-bg-disabled: rgba(0, 0, 0, 0.04);
+        --color-border-disabled: #d9d9d9;
+        --color-link-hover: #69b1ff;
+        --color-link-active: #0958d9;
+      }
+
+      a {
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: var(--color-link-hover);
+      }
+
+      a:active {
+        color: var(--color-link-active);
+      }
+
       #main {
         margin: 0 auto;
         width: 800px;
       }
+
       a {
         font-size: 18px;
       }
+
       img {
         width: 200px;
       }
-      #version, #old-version {
+
+      #version,
+      #old-version {
         font-size: 18px;
       }
     </style>
   </head>
+
   <body>
     <div id="main">
       <div>
@@ -31,13 +61,29 @@
         <div id="old-version"></div>
       </div>
       <div>
+        <h2>更新日志：</h2>
+        <a
+          target="_blank"
+          href="https://github.com/maxmeng93/hb-helper/blob/main/CHANGELOG.md"
+          >查看</a
+        >
+      </div>
+      <div>
         <h2>使用教程：</h2>
         <ul>
           <li>
-            <a href="https://www.youtube.com/watch?v=i3udYwTsT0E">YouTube</a>
+            <a
+              target="_blank"
+              href="https://www.youtube.com/watch?v=i3udYwTsT0E"
+              >YouTube</a
+            >
           </li>
           <li>
-            <a href="https://www.bilibili.com/video/BV1ps421P7Hz">bilibili</a>
+            <a
+              target="_blank"
+              href="https://www.bilibili.com/video/BV1ps421P7Hz"
+              >bilibili</a
+            >
           </li>
         </ul>
       </div>
