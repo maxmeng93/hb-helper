@@ -46,7 +46,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "manifest-chrome.json", to: "manifest.json" },
-        // { from: "manifest-firfox.json", to: "manifest.json" },
+        // { from: "manifest-firefox.json", to: "manifest.json" },
         { from: "src/images", to: "images" },
       ],
     }),
