@@ -1,5 +1,5 @@
+import { createRoot } from "react-dom/client";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import "./index.scss";
 
 const hb = "https://m.touker.com";
@@ -10,6 +10,7 @@ const Popup: React.FC = () => {
   const [time, setTime] = useState("");
   const [show, setShow] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [stopDisabled, setStopDisabled] = useState(true);
 
   useEffect(() => {
     getVersion();
@@ -25,6 +26,10 @@ const Popup: React.FC = () => {
 
       if (curUrl.startsWith(url)) {
         setDisabled(false);
+      }
+
+      if (curUrl.startsWith(hb)) {
+        setStopDisabled(false);
       }
     });
   };
@@ -98,7 +103,7 @@ const Popup: React.FC = () => {
           <button
             id="postpone-stop"
             className="btn dangerous"
-            disabled={disabled}
+            disabled={stopDisabled}
             onClick={() => postpone("postpone-stop")}
           >
             停止延期
@@ -129,4 +134,6 @@ const Popup: React.FC = () => {
   );
 };
 
-ReactDOM.render(<Popup />, document.getElementById("root"));
+const container = document.getElementById("root");
+const root = createRoot(container!);
+root.render(<Popup />);

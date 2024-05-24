@@ -1,5 +1,5 @@
+import { createRoot } from "react-dom/client";
 import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
 import "./index.scss";
 
 const Options: React.FC = () => {
@@ -85,4 +85,6 @@ const Options: React.FC = () => {
   );
 };
 
-ReactDOM.render(<Options />, document.getElementById("root"));
+const container = document.getElementById("root");
+const root = createRoot(container!);
+root.render(<Options />);
