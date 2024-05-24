@@ -19,7 +19,7 @@
     }
   ],
   "options_page": "options.html",
-  "permissions": ["activeTab", "storage", "https://www.maxmeng.top/"],
+  "permissions": ["activeTab", "storage"],
   "optional_permissions": [],
   "background": {
     "scripts": ["background.js"]
