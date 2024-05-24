@@ -1,0 +1,45 @@
+{
+  "name": "hb-helper",
+  "version": "0.2.0",
+  "description": "华宝条件单助手，快速打开华宝智投条件单网页，一键延期所有条件单",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "reload:firfox": "web-ext run --source-dir=dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxmeng93/hb-helper.git"
+  },
+  "keywords": [],
+  "author": "maxmeng93",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maxmeng93/hb-helper/issues"
+  },
+  "homepage": "https://github.com/maxmeng93/hb-helper#readme",
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "@types/chrome": "^0.0.268",
+    "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.0",
+    "sass": "^1.77.2",
+    "sass-loader": "^14.2.1",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "web-ext": "^7.11.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

@@ -1,0 +1,130 @@
+:root {
+  --color: #dd3432;
+  --color-primary: #1677ff;
+  --color-error: #ff4d4f;
+  --color-disabled: #c2c2c2;
+  --color-text-disabled: rgba(0, 0, 0, 0.25);
+  --color-bg-disabled: rgba(0, 0, 0, 0.04);
+  --color-border-disabled: #d9d9d9;
+  --color-link-hover: #69b1ff;
+  --color-link-active: #0958d9;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+a:active {
+  color: var(--color-link-active);
+}
+
+body {
+  width: 290px;
+  padding: 0;
+  margin: 0;
+}
+
+#main {
+  position: relative;
+  background-color: #e8eaeb;
+}
+
+#header {
+  padding-top: 16px;
+  background-color: #fff;
+}
+
+h2 {
+  margin: 0;
+  font-size: 18px;
+  text-align: center;
+  color: var(--color);
+  font-style: italic;
+}
+
+#container {
+  padding: 16px 20px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: #fff;
+}
+
+#btn-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.btn {
+  box-sizing: border-box;
+  width: 120px;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background-color: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn.dangerous {
+  color: var(--color-error);
+  border-color: var(--color-error);
+  background-color: #fff;
+}
+
+.btn:disabled {
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-disabled);
+  background-color: var(--color-bg-disabled);
+  cursor: not-allowed;
+}
+
+#info {
+  margin: 10px 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#footer {
+  padding: 4px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#version {
+  color: #c2c2c2;
+}
+
+#go-to-options {
+  cursor: pointer;
+  color: #666666;
+}
+
+#hb-grid-wrap {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#hb-grid-wrap > img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+}

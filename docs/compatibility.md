@@ -1,5 +1,7 @@
 ## manifest.json 文件差异
 
+### 1. `background` 字段
+
 - firefox
 
 ```json

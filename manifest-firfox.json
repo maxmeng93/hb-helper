@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "华宝条件单助手",
+  "version": "0.2.0",
+  "description": "快速打开华宝智投条件单网页，一键延期所有条件单",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/logo/16x16.png",
+      "32": "images/logo/32x32.png",
+      "48": "images/logo/icon48.png",
+      "128": "images/logo/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.touker.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "options_page": "options.html",
+  "permissions": ["activeTab", "storage", "https://www.maxmeng.top/"],
+  "optional_permissions": [],
+  "background": {
+    "scripts": ["background.js"]
+  }
+}
