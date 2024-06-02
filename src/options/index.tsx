@@ -37,11 +37,11 @@ const Options: React.FC = () => {
     <div id="main">
       <div>
         <h2>最新版本：</h2>
-        <div className="version">V{version}</div>
+        <div className="version">{version}</div>
       </div>
       <div>
         <h2>当前版本：</h2>
-        <div className="version">V{curVersion}</div>
+        <div className="version">{curVersion}</div>
       </div>
       <div>
         <h2>更新日志：</h2>

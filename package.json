@@ -1,7 +1,7 @@
 {
-  "name": "hb-helper",
+  "name": "etf-helper",
   "version": "0.2.0",
-  "description": "华宝条件单助手，快速打开华宝智投条件单网页，一键延期所有条件单",
+  "description": "ETF投资助手，一键延期华宝条件单，自定义网格策略",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
@@ -39,6 +39,8 @@
   "dependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "antd": "^5.17.4",
+    "classnames": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

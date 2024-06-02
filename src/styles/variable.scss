@@ -1,0 +1,24 @@
+:root {
+  --color: #dd3432;
+  --color-primary: #1677ff;
+  --color-error: #ff4d4f;
+  --color-disabled: #c2c2c2;
+  --color-text-disabled: rgba(0, 0, 0, 0.25);
+  --color-bg-disabled: rgba(0, 0, 0, 0.04);
+  --color-border-disabled: #d9d9d9;
+  --color-link-hover: #69b1ff;
+  --color-link-active: #0958d9;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+}
+
+a:active {
+  color: var(--color-link-active);
+}
