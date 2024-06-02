@@ -62,7 +62,7 @@ const Hb: React.FC = () => {
     <div className="hb">
       <Row className="btn-wrap" gutter={[8, 8]}>
         <Col span={12}>
-          <Button ghost type="primary" className="btn" onClick={openHbPage}>
+          <Button ghost type="primary" onClick={openHbPage}>
             查看条件单
           </Button>
         </Col>
