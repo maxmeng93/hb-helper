@@ -3,16 +3,24 @@ import classnames from "classnames";
 import React, { useEffect, useState } from "react";
 import Hb from "./hb";
 import Grid from "./grid";
+import Points from "./points";
 import "./index.scss";
 
 const types = [
   {
     label: "华宝条件单",
     value: "hb",
+    component: Hb,
+  },
+  {
+    label: "关键点位",
+    value: "points",
+    component: Points,
   },
   {
     label: "网格策略",
     value: "gird",
+    component: Grid,
   },
 ];
 
@@ -69,8 +77,11 @@ const Popup: React.FC = () => {
             );
           })}
         </div>
-        {type === "hb" ? <Hb></Hb> : null}
-        {type === "gird" ? <Grid></Grid> : null}
+        {types.map((item) => {
+          return type === item.value ? (
+            <item.component key={item.value}></item.component>
+          ) : null;
+        })}
       </main>
     </>
   );

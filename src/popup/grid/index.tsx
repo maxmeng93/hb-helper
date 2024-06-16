@@ -53,6 +53,12 @@ const Grid: React.FC = () => {
   ];
 
   return (
+    <div>
+      <p style={{ textAlign: "center" }}>敬请期待</p>
+    </div>
+  );
+
+  return (
     <div style={{ width: "700px" }}>
       <Form layout="inline">
         {/* <Form.Item label="ETF名称">

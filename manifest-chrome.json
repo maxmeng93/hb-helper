@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ETF投资助手",
   "version": "0.3.0",
-  "description": "一键延期华宝条件单，自定义网格策略",
+  "description": "一键延期华宝条件单；利用K线图显示E大关键点位；自定义网格策略",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

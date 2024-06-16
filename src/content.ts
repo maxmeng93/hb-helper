@@ -138,7 +138,7 @@ function checkDeadline(orders: any[]) {
 }
 
 function getOrders() {
-  const list = [];
+  const list: { date: string; index: number }[] = [];
   let elements = document.querySelectorAll(".monitor-item");
 
   for (let i = 0; i < elements.length; i++) {
@@ -157,5 +157,5 @@ function isMatch(date: string) {
   const expireDate = new Date(date);
   const diff = expireDate.getTime() - now.getTime();
   const days = Math.floor(diff / (24 * 3600 * 1000));
-  return days <= 21;
+  return days <= 61;
 }
