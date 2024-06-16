@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "华宝条件单助手",
-  "version": "0.2.0",
-  "description": "快速打开华宝智投条件单网页，一键延期所有条件单",
+  "name": "ETF投资助手",
+  "version": "0.3.0",
+  "description": "一键延期华宝条件单；利用K线图显示E大关键点位；自定义网格策略",
   "action": {
-    "default_popup": "src/popup/index.html",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "images/logo/16x16.png",
       "32": "images/logo/32x32.png",
@@ -15,14 +15,14 @@
   "content_scripts": [
     {
       "matches": ["https://*.touker.com/*"],
-      "js": ["src/content.js"]
+      "js": ["content.js"]
     }
   ],
-  "options_page": "src/options/index.html",
-  "permissions": ["activeTab", "storage", "https://www.maxmeng.top/"],
+  "options_page": "options.html",
+  "permissions": ["activeTab", "storage"],
   "optional_permissions": [],
   "background": {
-    "service_worker": "src/background.js",
+    "service_worker": "background.js",
     "type": "module"
   }
 }

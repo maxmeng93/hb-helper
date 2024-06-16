@@ -22,3 +22,7 @@
 2. 点击“查看条件单”，自动打开“华宝智投条件单”网页。
 3. 点击“自动延期(单个)”，自动延期第一个符合条件的条件单。
 4. 点击“自动延期(多个)”，自动延期所有符合条件的条件单。如果想提前结束，则点击“停止延期”。
+
+## 其他 
+1. [web-ext](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/)
+2. [chrome-extensions](https://developer.chrome.com/docs/extensions/mv3/architecture-overview/)

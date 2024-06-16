@@ -9,7 +9,7 @@ const SUBMIT_ORDER = "SUBMIT_ORDER";
 
 const single = "postpone-single";
 const multiple = "postpone-multiple";
-const stop = "postpone-stop";
+const postponeStop = "postpone-stop";
 
 const stopCache = "stop";
 const stateCache = "state";
@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       setLocalStorage(postponeTypeCache, action);
       checkDeadline(orders);
       break;
-    case stop:
+    case postponeStop:
       setLocalStorage(stopCache, "true");
       break;
     default:
@@ -43,20 +43,20 @@ window.addEventListener("load", function () {
   checkState();
 });
 
-function delay(time) {
+function delay(time: number) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve();
+      resolve(true);
     }, time);
   });
 }
 
-function setLocalStorage(key, value) {
+function setLocalStorage(key: string, value: string) {
   const dataKey = `${PREFIX}-${key}`;
   chrome.storage.local.set({ [dataKey]: value });
 }
 
-function getLocalStorage(key) {
+function getLocalStorage(key: string) {
   const dataKey = `${PREFIX}-${key}`;
   return new Promise((resolve, reject) => {
     chrome.storage.local.get(dataKey, function (data) {
@@ -90,9 +90,11 @@ async function checkState() {
       await delay(1000);
       let eles = document.querySelectorAll(".deadline-card .quick-label");
       const last = eles[eles.length - 1].querySelector(".time-select-btn");
+      // @ts-ignore
       last.click();
 
       const submit = document.querySelector(".submit-condition>input");
+      // @ts-ignore
       submit.click();
       setLocalStorage(stateCache, SUBMIT_ORDER);
     }
@@ -102,8 +104,10 @@ async function checkState() {
       await delay(1000);
       const checkbox = document.querySelector("#onlyTg");
       if (!checkbox) return;
+      // @ts-ignore
       if (!checkbox.checked) checkbox.click();
 
+      // @ts-ignore
       document.querySelector("#btnSubmit").click();
       setLocalStorage(stateCache, CHECK_DEADLINE);
     }
@@ -112,11 +116,13 @@ async function checkState() {
   }
 }
 
-function checkDeadline(orders) {
+function checkDeadline(orders: any[]) {
   for (let order of orders) {
     let ele = document.querySelectorAll(".monitor-item")[order.index];
 
-    const options = ele.querySelector(".opr").querySelectorAll("i");
+    // @ts-ignore
+    const options = ele.querySelector(".opr").querySelectorAll("i") || [];
+    // @ts-ignore
     for (let option of options) {
       if (option.textContent === "延期") {
         option.click();
@@ -132,12 +138,13 @@ function checkDeadline(orders) {
 }
 
 function getOrders() {
-  const list = [];
+  const list: { date: string; index: number }[] = [];
   let elements = document.querySelectorAll(".monitor-item");
 
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
     let expireDate = element.querySelector(".expire-date");
+    // @ts-ignore
     const date = expireDate.textContent.replace("截止日期：", "");
     if (isMatch(date)) list.push({ date, index: i });
   }
@@ -145,10 +152,10 @@ function getOrders() {
   return list;
 }
 
-function isMatch(date) {
+function isMatch(date: string) {
   const now = new Date();
   const expireDate = new Date(date);
   const diff = expireDate.getTime() - now.getTime();
   const days = Math.floor(diff / (24 * 3600 * 1000));
-  return days <= 21;
+  return days <= 61;
 }

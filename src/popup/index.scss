@@ -1,0 +1,63 @@
+@import url("../styles/global.scss");
+
+body {
+  min-width: 400px;
+  margin: 0;
+  background-color: #fff;
+}
+
+.header {
+  padding: 16px;
+  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .left {
+    display: flex;
+    align-items: center;
+    .logo {
+      width: 30px;
+      margin-right: 6px;
+    }
+    .title {
+      margin-right: 6px;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: #424242;
+    }
+    .version {
+      font-size: 16px;
+      color: #afafaf;
+    }
+  }
+
+  .go-to-options {
+    cursor: pointer;
+    color: #666666;
+  }
+}
+
+.main {
+  margin: 12px 24px 24px 24px;
+  .type-list {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #e8e8e8;
+    & > div {
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 15px;
+      width: 45%;
+      cursor: pointer;
+      &.active {
+        background-color: var(--color);
+        color: #fff;
+      }
+    }
+  }
+}
