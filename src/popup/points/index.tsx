@@ -4,14 +4,14 @@ import React, {
   useCallback,
   useRef,
   useState,
-} from "react";
+} from 'react';
 import {
   LeftOutlined,
   RightOutlined,
   QuestionCircleOutlined,
-} from "@ant-design/icons";
-import * as echarts from "echarts";
-import { Spin, Tooltip } from "antd";
+} from '@ant-design/icons';
+import * as echarts from 'echarts';
+import { Spin, Tooltip, Table } from 'antd';
 
 // 基金
 interface Item {
@@ -40,6 +40,18 @@ enum PointType {
   pressure = 2,
 }
 
+const pointColor = {
+  [PointType.normal]: '#91d5ff',
+  [PointType.support]: '#73d13d',
+  [PointType.pressure]: '#ff4d4f',
+};
+
+const pointText = {
+  [PointType.normal]: '正常',
+  [PointType.support]: '支撑',
+  [PointType.pressure]: '压力',
+};
+
 interface IData {
   日期: string;
   开盘: number;
@@ -54,10 +66,10 @@ interface IData {
   换手率: number;
 }
 
-const upColor = "#ec0000";
-const upBorderColor = "#8A0000";
-const downColor = "#00da3c";
-const downBorderColor = "#008F28";
+const upColor = '#ec0000';
+const upBorderColor = '#8A0000';
+const downColor = '#00da3c';
+const downBorderColor = '#008F28';
 
 const KLineChart = () => {
   const [loading, setLoading] = useState(false);
@@ -65,9 +77,10 @@ const KLineChart = () => {
   const [index, setIndex] = useState<number>();
   const [current, setCurrent] = useState<Item>();
   const [data, setData] = useState<IData[]>([]);
+  const [start, setStart] = useState(0);
   const chartRef = useRef(null);
   const title = useMemo(() => {
-    return current ? `${current.name} - ${current.code}` : "";
+    return current ? `${current.name} - ${current.code}` : '';
   }, [current]);
 
   useEffect(() => {
@@ -79,6 +92,10 @@ const KLineChart = () => {
       setCurrent(list[index]);
     }
   }, [list, index]);
+
+  useEffect(() => {
+    setStart(0);
+  }, [index]);
 
   useEffect(() => {
     if (current) {
@@ -123,7 +140,7 @@ const KLineChart = () => {
             涨跌幅,
             涨跌额,
             换手率,
-          ] = item.split(",");
+          ] = item.split(',');
           return {
             日期,
             开盘: parseFloat(开盘),
@@ -140,8 +157,9 @@ const KLineChart = () => {
         });
         setData(newData);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        console.log(`查询指数历史数据出错: ${code}`);
+        setData([]);
       })
       .finally(() => {
         setLoading(false);
@@ -159,76 +177,68 @@ const KLineChart = () => {
   };
 
   useEffect(() => {
-    const normalColor = "#91d5ff";
-    const supportColor = "#73d13d";
-    const pressureColor = "#ff4d4f";
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
 
     const chart = echarts.init(chartRef.current);
     const { categoryData, values } = processData(data);
 
-    let title = "";
     const markLine: any[] = [];
     const markArea: any[] = [];
     if (current) {
-      title = `${current.name} - ${current.code}`;
       current.points?.forEach((point) => {
-        let color = normalColor;
-        if (point.type === PointType.support) {
-          color = supportColor;
-        } else if (point.type === PointType.pressure) {
-          color = pressureColor;
-        }
-        const { min, max, type } = point;
+        const { date, min, max, type } = point;
+        const color = pointColor[type];
+
+        if (min === null && max === null) return;
+
         if (min === max) {
-          markLine.push({
-            yAxis: min,
+          const other = {
             label: {
               formatter: `${min}`,
             },
             lineStyle: {
-              type: "solid",
+              type: 'solid',
+              color: color,
+              width: 2,
+            },
+          };
+          markLine.push([
+            { ...other, coord: [date, min] },
+            { ...other, coord: [yesterdayStr, min] },
+          ]);
+        } else {
+          const other = {
+            label: {
+              formatter: `${min}-${max}`,
+            },
+            itemStyle: {
               color: color,
             },
-          });
-        } else {
+          };
+
           markArea.push([
-            {
-              yAxis: min,
-              label: {
-                formatter: `${min}-${max}`,
-              },
-              itemStyle: {
-                color: color,
-              },
-            },
-            {
-              yAxis: max,
-              itemStyle: {
-                color: color,
-              },
-            },
+            { ...other, coord: [date, min] },
+            { ...other, coord: [yesterdayStr, max] },
           ]);
         }
       });
     }
 
     const option = {
-      // title: {
-      //   text: title,
-      //   left: "center",
-      // },
       grid: {
-        top: "5%",
+        top: '5%',
       },
       xAxis: {
-        type: "category",
+        type: 'category',
         data: categoryData,
         scale: true,
         boundaryGap: false,
         axisLine: { onZero: false },
         splitLine: { show: false },
-        min: "dataMin",
-        max: "dataMax",
+        min: 'dataMin',
+        max: 'dataMax',
       },
       yAxis: {
         scale: true,
@@ -238,28 +248,28 @@ const KLineChart = () => {
       },
       dataZoom: [
         {
-          type: "inside",
-          start: 0,
+          type: 'inside',
+          start: start,
           end: 100,
         },
         {
           show: true,
-          type: "slider",
-          top: "90%",
-          start: 0,
+          type: 'slider',
+          top: '90%',
+          start: start,
           end: 100,
         },
       ],
       tooltip: {
-        trigger: "axis",
+        trigger: 'axis',
         axisPointer: {
-          type: "cross",
+          type: 'cross',
         },
       },
       series: [
         {
-          type: "candlestick",
-          name: "日K",
+          type: 'candlestick',
+          name: '日K',
           data: values,
           itemStyle: {
             color: upColor,
@@ -268,7 +278,8 @@ const KLineChart = () => {
             borderColor0: downBorderColor,
           },
           markLine: {
-            symbol: ["none", "none"],
+            animation: false,
+            symbol: ['none', 'none'],
             data: markLine,
           },
           markArea: {
@@ -284,13 +295,13 @@ const KLineChart = () => {
       chart.resize();
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
       chart.dispose();
     };
-  }, [current, data]);
+  }, [start, current, data]);
 
   const pre = useCallback(() => {
     if (index === undefined) return;
@@ -310,55 +321,133 @@ const KLineChart = () => {
     }
   }, [index]);
 
+  const calcStart = useCallback(
+    (time: string) => {
+      if (data.length === 0) return;
+      const start = data[0].日期;
+      const end = data[data.length - 1].日期;
+      const diff = new Date(end).getTime() - new Date(start).getTime();
+      const current = new Date(time).getTime() - new Date(start).getTime();
+      const s = (current / diff) * 100;
+      setStart(s);
+    },
+    [data],
+  );
+
+  const columns = [
+    {
+      title: '日期',
+      dataIndex: 'date',
+      key: 'date',
+      width: 100,
+      render: (date) => {
+        return <a onClick={() => calcStart(date)}>{date}</a>;
+      },
+    },
+    {
+      title: '当日收盘',
+      dataIndex: 'close',
+      key: 'close',
+      width: 90,
+      render: (_, record) => {
+        const { date } = record;
+        const curDate = new Date(date);
+        let print = 0;
+        for (let i = 0; i < data.length; i++) {
+          if (new Date(data[i].日期) <= curDate) {
+            print = data[i].收盘;
+          }
+        }
+        return print;
+      },
+    },
+    {
+      title: '关键点位',
+      dataIndex: 'min',
+      key: 'min',
+      width: 100,
+      render: (_, record) => {
+        const { min, max } = record;
+        if (!min && !max) return null;
+        if (min === max) {
+          return min;
+        } else {
+          return `${min}-${max}`;
+        }
+      },
+    },
+    {
+      title: '类型',
+      dataIndex: 'type',
+      key: 'type',
+      width: 50,
+      render: (type) => {
+        return (
+          <span style={{ color: pointColor[type] }}>{pointText[type]}</span>
+        );
+      },
+    },
+    {
+      title: '原文',
+      dataIndex: 'remark',
+      key: 'remark',
+      render: (_, record) => {
+        const { remark, url } = record;
+        return (
+          <>
+            <span>{remark}</span>
+            {url ? (
+              <a href={url} target="_blank">
+                来源
+              </a>
+            ) : null}
+          </>
+        );
+      },
+    },
+  ];
+
   return (
     <div>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <LeftOutlined style={{ cursor: "pointer" }} onClick={pre} />
-        <h2 style={{ margin: "0 2em" }}>{title}</h2>
-        <RightOutlined style={{ cursor: "pointer" }} onClick={next} />
+        <LeftOutlined style={{ cursor: 'pointer' }} onClick={pre} />
+        <h2 style={{ margin: '0 2em' }}>{title}</h2>
+        <RightOutlined style={{ cursor: 'pointer' }} onClick={next} />
       </div>
       <Spin spinning={loading}>
-        <div ref={chartRef} style={{ height: "300px", width: "600px" }} />
+        <div ref={chartRef} style={{ height: '300px', width: '700px' }} />
       </Spin>
-      <div style={{ marginTop: "2em" }}>
-        <strong style={{ fontSize: 16 }}>关键点位</strong>
+      <div style={{ marginTop: '2em', marginBottom: '1em' }}>
+        <strong style={{ fontSize: 16 }}>E大关键点位</strong>
         <Tooltip
           placement="right"
-          color={"#fff"}
+          color={'#fff'}
           title={
             <a href="https://wj.qq.com/s2/14815104/7142/" target="_blank">
               补充点位数据
             </a>
           }
         >
-          <QuestionCircleOutlined style={{ marginLeft: "6px" }} />
+          <QuestionCircleOutlined style={{ marginLeft: '6px' }} />
         </Tooltip>
       </div>
-      <ul>
-        {current?.points
-          ?.sort((a, b) => {
-            const { date: dateA } = a;
-            const { date: dateB } = b;
-            return dateA > dateB ? -1 : 1;
-          })
-          .map((p) => {
-            const { min, max, date, remark, url } = p;
-            return (
-              <li key={`${current.code}-${min}-${max}`}>
-                <a href={url} target="_blank" style={{ marginRight: "1em" }}>
-                  {date}
-                </a>
-                <span>{remark}</span>
-              </li>
-            );
-          })}
-      </ul>
+      <Table
+        size="small"
+        columns={columns}
+        pagination={false}
+        rowKey={({ date, url, min, max }) => `${date}-${url}-${min}-${max}`}
+        dataSource={current?.points?.sort((a, b) => {
+          const { date: dateA } = a;
+          const { date: dateB } = b;
+          return dateA > dateB ? -1 : 1;
+        })}
+      ></Table>
     </div>
   );
 };
