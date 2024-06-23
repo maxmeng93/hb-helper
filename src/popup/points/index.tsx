@@ -177,9 +177,7 @@ const KLineChart = () => {
   };
 
   useEffect(() => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const lastDate = data[data.length - 1]?.日期;
 
     const chart = echarts.init(chartRef.current);
     const { categoryData, values } = processData(data);
@@ -206,7 +204,7 @@ const KLineChart = () => {
           };
           markLine.push([
             { ...other, coord: [date, min] },
-            { ...other, coord: [yesterdayStr, min] },
+            { ...other, coord: [lastDate, min] },
           ]);
         } else {
           const other = {
@@ -220,7 +218,7 @@ const KLineChart = () => {
 
           markArea.push([
             { ...other, coord: [date, min] },
-            { ...other, coord: [yesterdayStr, max] },
+            { ...other, coord: [lastDate, max] },
           ]);
         }
       });
@@ -441,7 +439,7 @@ const KLineChart = () => {
         size="small"
         columns={columns}
         pagination={false}
-        rowKey={({ date, url, min, max }) => `${date}-${url}-${min}-${max}`}
+        rowKey={({ date, min }) => `${date}-$${min}-${Math.random() * 1000}`}
         dataSource={current?.points?.sort((a, b) => {
           const { date: dateA } = a;
           const { date: dateB } = b;
