@@ -4,3 +4,5 @@
 # production
 /dist
 *.zip
+
+.DS_Store
