@@ -1,19 +1,19 @@
 import * as math from 'mathjs';
-import React, { useState, useEffect, useRef } from 'react';
-import { Button, Form, InputNumber, Table } from 'antd';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import {
+  Button,
+  Form,
+  InputNumber,
+  Table,
+  Tooltip,
+  Row,
+  Col,
+  message,
+} from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import './index.scss';
 
-const {
-  create,
-  all,
-  add,
-  subtract,
-  pow,
-  multiply,
-  divide,
-  bignumber,
-  number,
-  round,
-} = math;
+const { create, all, add, pow, divide, number, round } = math;
 
 const { evaluate } = create(all, {
   number: 'BigNumber',
@@ -43,6 +43,18 @@ interface Grid {
   sellAmount: number;
 }
 
+/**
+ * 数学计算
+ * @param str 表达式
+ * @param roundN 四舍五入的位数
+ * @returns 计算结果
+ */
+const calc = (str: string, roundN?: number): number => {
+  let d = evaluate(str);
+  if (roundN) d = round(d, roundN);
+  return number(d);
+};
+
 const Grid: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState<Grid[]>([]);
@@ -51,6 +63,40 @@ const Grid: React.FC = () => {
   useEffect(() => {
     form.submit();
   }, []);
+
+  const d = useMemo(() => {
+    const { basePrice } = form.getFieldsValue();
+    if (data.length === 0) return null;
+    let buyAmount = 0;
+    let buyStock = 0;
+    let sellAmount = 0;
+    let sellStock = 0;
+
+    data.forEach((item) => {
+      // buyAmount += item.buyAmount;
+      buyAmount = calc(`${buyAmount} + ${item.buyAmount}`);
+      buyStock += item.buyStock;
+      // sellAmount += item.sellAmount;
+      sellAmount = calc(`${sellAmount} + ${item.sellAmount}`);
+      sellStock += item.sellStock;
+    });
+    const surplusStock = calc(`${buyStock} - ${sellStock}`);
+    const profit = calc(
+      `${sellAmount} - ${buyAmount} + ${surplusStock} * ${basePrice}`,
+    );
+    // 利润率
+    const profitRate = calc(`${profit} / ${buyAmount} * 100`, 2);
+
+    return {
+      buyAmount,
+      buyStock,
+      sellAmount,
+      sellStock,
+      surplusStock,
+      profit,
+      profitRate,
+    };
+  }, [data]);
 
   const columns = [
     {
@@ -123,18 +169,6 @@ const Grid: React.FC = () => {
   };
 
   /**
-   * 数学计算
-   * @param str 表达式
-   * @param roundN 四舍五入的位数
-   * @returns 计算结果
-   */
-  const calc = (str: string, roundN?: number): number => {
-    let d = evaluate(str);
-    if (roundN) d = round(d, roundN);
-    return number(d);
-  };
-
-  /**
    * 计算系数
    * @param {number} index - 输入的索引值，从0开始
    * @param {number} k - 控制增长的宽度参数
@@ -167,7 +201,7 @@ const Grid: React.FC = () => {
 
     const { basePrice, minPrice, baseAmount } = form.getFieldsValue();
     // 最大跌幅 = 最低价 / 基准价
-    const decline = number(divide(bignumber(minPrice), bignumber(basePrice)));
+    const decline = calc(`${minPrice} / ${basePrice}`);
 
     let index = 0;
     let level = 1;
@@ -175,14 +209,9 @@ const Grid: React.FC = () => {
 
     while (level >= decline) {
       levels.push(level);
-      level = number(
-        round(
-          subtract(
-            level,
-            multiply(calcCoefficient(index), divide(bignumber(step), 100)),
-          ) as number,
-          2,
-        ),
+      level = calc(
+        `${level} - ${calc(`${step} / 100`)} * ${calcCoefficient(index)}`,
+        2,
       );
       index++;
     }
@@ -195,8 +224,6 @@ const Grid: React.FC = () => {
       const { buyPrice, sellPrice } = price;
       // 买入金额、买入股数、卖出金额、卖出股数
       const buySell = calcBuySell(baseAmount, level, buyPrice, sellPrice);
-      // 卖出金额、卖出股数
-      // const sell = calcSell(baseAmount, level, sellPrice);
 
       return {
         key: `${type}-${level}`,
@@ -224,6 +251,7 @@ const Grid: React.FC = () => {
       `${buyStock} * (1 - (${sellPrice} - ${buyPrice}) / ${sellPrice})`,
     );
     sellStock = Math.floor(sellStock / 100) * 100;
+    sellStock = Math.max(sellStock, 100);
     // 卖出金额
     const sellAmount = calc(`${sellStock} * ${sellPrice}`);
 
@@ -238,14 +266,10 @@ const Grid: React.FC = () => {
   // 根据基准价和档位计算网格每档的数据
   const calcGridItemByLevel = (basePrice, level, preLevel) => {
     // 买入价 = 基准价 * 档位，保留3位小数
-    const buyPrice = number(
-      round(multiply(bignumber(basePrice), level), 3),
-    ) as number;
+    const buyPrice = calc(`${basePrice} * ${level}`, 3);
 
     // 卖出价 = 基准价 * (前一个档位)，保留3位小数
-    const sellPrice = number(
-      round(multiply(bignumber(basePrice), preLevel), 3) as number,
-    );
+    const sellPrice = calc(`${basePrice} * ${preLevel}`, 3);
 
     return {
       buyPrice,
@@ -260,10 +284,15 @@ const Grid: React.FC = () => {
   };
 
   const genGrid = (values) => {
+    const { step, middleStep, bigStep, basePrice, baseAmount } = values;
+    if (basePrice <= 0 || baseAmount <= 0) return;
+    if (baseAmount / basePrice < 100) {
+      message.warning('每份金额不够买入1手（100股）');
+      return;
+    }
+
     // 中网、大网过滤1档
     const fbp = (e) => e.level != 1;
-    const { step, middleStep, bigStep } = values;
-
     const sPrice = getLevels(step, '小网');
     const mPrice = getLevels(middleStep, '中网').filter(fbp);
     const bPrice = getLevels(bigStep, '大网').filter(fbp);
@@ -288,7 +317,7 @@ const Grid: React.FC = () => {
         onFinish={genGrid}
         initialValues={{
           basePrice: 1,
-          baseAmount: 10000,
+          baseAmount: 1000,
           minPrice: 0.6,
           step: 5,
           middleStep: 15,
@@ -301,7 +330,7 @@ const Grid: React.FC = () => {
           tooltip="第一份买入价"
           required
         >
-          <InputNumber></InputNumber>
+          <InputNumber step="0.1"></InputNumber>
         </Form.Item>
         <Form.Item
           label="每份金额"
@@ -317,7 +346,7 @@ const Grid: React.FC = () => {
           tooltip="低于此价不会再买入"
           required
         >
-          <InputNumber></InputNumber>
+          <InputNumber step="0.1"></InputNumber>
         </Form.Item>
         <Form.Item
           label="步长"
@@ -343,6 +372,69 @@ const Grid: React.FC = () => {
         columns={columns}
         pagination={false}
       ></Table>
+      {d === null ? null : (
+        <div className="result">
+          <h2 style={{ marginBottom: 0 }}>压力测试与盈利测算</h2>
+          <Row gutter={[8, 0]}>
+            <Col span={6}>
+              <p>买入金额：{d?.buyAmount}</p>
+            </Col>
+            <Col span={6}>
+              <p>买入股数：{d?.buyStock}</p>
+            </Col>
+            <Col span={6}>
+              <p>卖出金额：{d?.sellAmount}</p>
+            </Col>
+            <Col span={6}>
+              <p>卖出股数：{d?.sellStock}</p>
+            </Col>
+            <Col span={6}>
+              <p>剩余股数：{d?.surplusStock}</p>
+            </Col>
+            <Col span={6}>
+              <p>
+                利润&nbsp;
+                <Tooltip title="利润 = 卖出金额 - 买入金额 + 剩余股数 * 基准价">
+                  <QuestionCircleOutlined className="icon" />
+                </Tooltip>
+                ：{d?.profit}
+              </p>
+            </Col>
+            <Col span={6}>
+              <p>利润率：{d?.profitRate}%</p>
+            </Col>
+          </Row>
+        </div>
+      )}
+      <div className="article">
+        <h2 style={{ marginBottom: 0 }}>E大网格三篇</h2>
+        <ul>
+          <li>
+            <a
+              href="https://mp.weixin.qq.com/s/uxktt5ZpNo03FpQQX-aG7g"
+              target="_blank"
+            >
+              1. 波段策略.网格之一：写在前面、体系以及策略
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://mp.weixin.qq.com/s/-czfqGvxkDcay_tSI1jv5g"
+              target="_blank"
+            >
+              2. 波段策略.网格之二：网格策略基础/1.0版
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://mp.weixin.qq.com/s/8pRKsjiQSZzrmH-uWCkRLQ"
+              target="_blank"
+            >
+              3. 波段策略.网格之三：网格策略进阶/2.0版
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

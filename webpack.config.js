@@ -13,8 +13,7 @@ module.exports = (env) => {
       background: './src/background.ts',
       content: './src/content.ts',
       popup: './src/popup/index.tsx',
-      options: './src/popup/index.tsx',
-      // options: './src/options/index.tsx',
+      options: './src/options/index.tsx',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
