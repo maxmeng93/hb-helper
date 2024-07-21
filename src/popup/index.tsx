@@ -1,26 +1,26 @@
-import { createRoot } from "react-dom/client";
-import classnames from "classnames";
-import React, { useEffect, useState, useMemo } from "react";
-import Hb from "./hb";
-import Grid from "./grid";
-import Points from "./points";
-import { compareVersionLatest } from "../utils";
-import "./index.scss";
+import { createRoot } from 'react-dom/client';
+import classnames from 'classnames';
+import React, { useEffect, useState, useMemo } from 'react';
+import Hb from './hb';
+import Grid from './grid';
+import Points from './points';
+import { compareVersionLatest } from '../utils';
+import './index.scss';
 
 const types = [
   {
-    label: "华宝条件单",
-    value: "hb",
+    label: '华宝条件单',
+    value: 'hb',
     component: Hb,
   },
   {
-    label: "关键点位",
-    value: "points",
+    label: '关键点位',
+    value: 'points',
     component: Points,
   },
   {
-    label: "网格策略",
-    value: "gird",
+    label: '网格策略',
+    value: 'gird',
     component: Grid,
   },
 ];
@@ -31,10 +31,10 @@ interface Notice {
 }
 
 const Popup: React.FC = () => {
-  const [version, setVersion] = useState("");
-  const [lastVersion, setLastVersion] = useState("");
+  const [version, setVersion] = useState('');
+  const [lastVersion, setLastVersion] = useState('');
   const [notices, setNotices] = useState<Notice[]>([]);
-  const [type, setType] = useState("hb");
+  const [type, setType] = useState('gird');
 
   const isOld = useMemo(() => {
     if (!lastVersion || !version) return false;
@@ -53,7 +53,7 @@ const Popup: React.FC = () => {
   };
 
   function getConfig() {
-    const url = "https://www.maxmeng.top/data/hb-helper.json?t=" + Date.now();
+    const url = 'https://www.maxmeng.top/data/hb-helper.json?t=' + Date.now();
 
     fetch(url)
       .then((res) => res.json())
@@ -76,7 +76,7 @@ const Popup: React.FC = () => {
     if (chrome.runtime.openOptionsPage) {
       chrome.runtime.openOptionsPage();
     } else {
-      window.open(chrome.runtime.getURL("options.html"));
+      window.open(chrome.runtime.getURL('options.html'));
     }
   };
 
@@ -87,7 +87,7 @@ const Popup: React.FC = () => {
           <img className="logo" src="../images/logo/32x32.png" alt="LOGO" />
           <span className="title">ETF投资助手</span>
           <span
-            className={classnames("version", {
+            className={classnames('version', {
               old: isOld,
             })}
           >
@@ -112,7 +112,7 @@ const Popup: React.FC = () => {
             return (
               <div
                 key={item.value}
-                className={classnames("type-item", {
+                className={classnames('type-item', {
                   active: type === item.value,
                 })}
                 onClick={() => setType(item.value)}
@@ -150,6 +150,6 @@ const Popup: React.FC = () => {
   );
 };
 
-const container = document.getElementById("root");
+const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(<Popup />);
