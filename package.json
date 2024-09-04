@@ -1,7 +1,7 @@
 {
   "name": "etf-helper",
-  "version": "0.4.0",
-  "description": "ETF投资助手。一键延期华宝条件单；利用K线图显示E大关键点位；自定义网格策略。",
+  "version": "0.4.1",
+  "description": "ETF投资助手。一键延期华宝条件单；利用K线图显示E大（ETF拯救世界）关键点位；自定义网格策略。",
   "scripts": {
     "build": "webpack --env production",
     "watch": "webpack --watch",

@@ -34,7 +34,7 @@ const Popup: React.FC = () => {
   const [version, setVersion] = useState('');
   const [lastVersion, setLastVersion] = useState('');
   const [notices, setNotices] = useState<Notice[]>([]);
-  const [type, setType] = useState('gird');
+  const [type, setType] = useState('hb');
 
   const isOld = useMemo(() => {
     if (!lastVersion || !version) return false;
