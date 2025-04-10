@@ -2,8 +2,8 @@ import { createRoot } from 'react-dom/client';
 import classnames from 'classnames';
 import React, { useEffect, useState, useMemo } from 'react';
 import Hb from './hb';
-import Grid from './grid';
-import Points from './points';
+// import Grid from './grid';
+// import Points from './points';
 import { compareVersionLatest } from '../utils';
 import './index.scss';
 
@@ -13,16 +13,16 @@ const types = [
     value: 'hb',
     component: Hb,
   },
-  {
-    label: '关键点位',
-    value: 'points',
-    component: Points,
-  },
-  {
-    label: '网格策略',
-    value: 'gird',
-    component: Grid,
-  },
+  // {
+  //   label: '关键点位',
+  //   value: 'points',
+  //   component: Points,
+  // },
+  // {
+  //   label: '网格策略',
+  //   value: 'gird',
+  //   component: Grid,
+  // },
 ];
 
 interface Notice {
