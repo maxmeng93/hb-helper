@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import classnames from 'classnames';
 import React, { useEffect, useState, useMemo } from 'react';
 import Hb from './hb';
+import Articles from './articles';
 // import Grid from './grid';
 // import Points from './points';
 import { compareVersionLatest } from '../utils';
@@ -12,6 +13,11 @@ const types = [
     label: '华宝条件单',
     value: 'hb',
     component: Hb,
+  },
+  {
+    label: '文章阅读',
+    value: 'articles',
+    component: Articles,
   },
   // {
   //   label: '关键点位',
@@ -34,7 +40,7 @@ const Popup: React.FC = () => {
   const [version, setVersion] = useState('');
   const [lastVersion, setLastVersion] = useState('');
   const [notices, setNotices] = useState<Notice[]>([]);
-  const [type, setType] = useState('hb');
+  const [type, setType] = useState('articles');
 
   const isOld = useMemo(() => {
     if (!lastVersion || !version) return false;

@@ -1,0 +1,90 @@
+.articles {
+  h5 {
+    margin-top: 0;
+  }
+  .articles-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .section {
+    margin-bottom: 16px;
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      .section-title {
+        margin-bottom: 0 !important;
+        font-size: 14px !important;
+        color: #1890ff;
+      }
+
+      .refresh-btn {
+        padding: 0 4px;
+        height: 20px;
+        color: #1890ff;
+        
+        &:hover {
+          background-color: #f0f8ff;
+        }
+      }
+    }
+
+    .section-title {
+      margin-bottom: 8px !important;
+      font-size: 14px !important;
+      color: #1890ff;
+    }
+
+    .article-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      .article-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px solid #f0f0f0;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .article-title {
+          flex: 1;
+          cursor: pointer;
+          color: #262626;
+          font-size: 12px;
+          line-height: 1.4;
+          margin-right: 8px;
+          
+          // 文本截断
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          
+          &:hover {
+            color: #1890ff;
+            text-decoration: underline;
+          }
+        }
+
+        .article-date {
+          font-size: 11px;
+          color: #8c8c8c;
+          white-space: nowrap;
+          min-width: 30px;
+        }
+      }
+    }
+  }
+}
