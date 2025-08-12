@@ -19,8 +19,16 @@
     }
   ],
   "options_page": "options.html",
-  "permissions": ["activeTab", "storage"],
+  "permissions": [
+    "activeTab",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "downloads",
+    "scripting"
+  ],
   "optional_permissions": [],
+  "host_permissions": ["*://xueqiu.com/*"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
