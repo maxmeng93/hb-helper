@@ -64,31 +64,48 @@ export async function getRecommendedArticles(): Promise<Article[]> {
       return data || [];
     }
 
-    // 随机选择起始位置
-    const randomStart = Math.floor(Math.random() * Math.max(1, count - 20));
+    // 生成5个不重复的随机索引
+    const randomIndexes = generateRandomIndexes(count, 5);
     
-    // 获取连续的20篇文章
-    const { data: articles, error: articlesError } = await supabase
-      .from('articles')
-      .select('id, title, created_at')
-      .eq('is_published', true)
-      .order('created_at', { ascending: false })
-      .range(randomStart, randomStart + 19);
+    // 根据随机索引获取文章
+    const articlesPromises = randomIndexes.map(index => 
+      supabase
+        .from('articles')
+        .select('id, title, created_at')
+        .eq('is_published', true)
+        .order('created_at', { ascending: false })
+        .range(index, index)
+        .single()
+    );
 
-    if (articlesError) {
-      console.error('获取推荐文章失败:', articlesError);
-      return [];
-    }
+    // 并行获取所有文章
+    const articlesResults = await Promise.allSettled(articlesPromises);
+    
+    // 过滤成功获取的文章
+    const articles = articlesResults
+      .filter((result): result is PromiseFulfilledResult<any> => 
+        result.status === 'fulfilled' && result.value.data !== null
+      )
+      .map(result => result.value.data);
 
-    if (!articles || articles.length === 0) {
-      return [];
-    }
-
-    // 从20篇中随机选择5篇
-    const shuffled = [...articles].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 5);
+    return articles;
   } catch (error) {
     console.error('获取推荐文章时出错:', error);
     return [];
   }
+}
+
+// 生成不重复的随机索引数组
+function generateRandomIndexes(total: number, count: number): number[] {
+  const indexes: number[] = [];
+  const maxCount = Math.min(count, total);
+  
+  while (indexes.length < maxCount) {
+    const randomIndex = Math.floor(Math.random() * total);
+    if (!indexes.includes(randomIndex)) {
+      indexes.push(randomIndex);
+    }
+  }
+  
+  return indexes;
 }
